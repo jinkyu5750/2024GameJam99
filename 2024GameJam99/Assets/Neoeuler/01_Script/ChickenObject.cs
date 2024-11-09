@@ -75,6 +75,8 @@ public class ChickenObject : MonoBehaviour
     private bool isWalk;
     private bool isSit;
 
+    private Action deathEvent;
+    
     public bool IsSit()
     {
         return isSit;
@@ -115,9 +117,9 @@ public class ChickenObject : MonoBehaviour
         anim.SetBool("isWalk", true);
     }
 
-    public void Init()
+    public void Init(Action deathEvent)
     {
-        
+        this.deathEvent = deathEvent;
     }
 
     void OnDestroy()
@@ -443,8 +445,9 @@ public class ChickenObject : MonoBehaviour
     public void Die()
     {
         Debug.Log("ChickenObject가 사망했습니다.");
-        gameObject.SetActive(false);
+        deathEvent?.Invoke();
         
+        gameObject.SetActive(false);
     }
 
     private void UpdateHealthUI()

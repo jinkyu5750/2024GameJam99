@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +12,13 @@ public class GameManager : MonoBehaviour
 
     public bool isGameStart = false;
     public float clearTime = 0; // 게임 진행 시간
+
+    public TextMeshProUGUI scoreDisplay;
+    
+    [SerializeField] private GameScene gameSceneHandle;
+    [SerializeField] private Player_State playerState;
+
+    private int stageNumber = 0;
 
     void Awake()
     {
@@ -24,11 +33,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetStage(int index)
+    {
+        isGameStart = true;
+        clearTime = 0;
+        stageNumber = index;
+        UpdateUI();
+    }
+    
     private void Update()
     {
         if (StageManager.instance != null && StageManager.instance.currentStage != null && isGameStart)
         {
             clearTime += Time.deltaTime; // 클리어 타임 누적
+            if (gameSceneHandle == null)
+            {
+                gameSceneHandle = GameObject.Find("GameScene").GetComponent<GameScene>();
+                gameSceneHandle.Init();
+                playerState = GameObject.Find("Player").GetComponent<Player_State>();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -48,6 +71,7 @@ public class GameManager : MonoBehaviour
         if (!chickens.Contains(chicken))
         {
             chickens.Add(chicken);
+            chicken.Init(UpdateUI);
         }
     }
 
@@ -142,6 +166,26 @@ public class GameManager : MonoBehaviour
             chicken.SetSit(flag);
         }
     }
-    
+    private readonly int[] maxScore = new[] { 10, 30, 50 };
+    public void UpdateUI()
+    {
+        scoreDisplay.gameObject.SetActive(true);
+        int currentScore = GetInfectedChickenCount();
+        scoreDisplay.text = $"{currentScore} / {maxScore[stageNumber]}";
+
+        if (maxScore[stageNumber] >= currentScore)
+        {
+            GameWin();
+        }
+    }
+
+    public void GameWin()
+    {
+        //win
+        Debug.Log("Game Result call");
+        
+
+        
+    }
     
 }

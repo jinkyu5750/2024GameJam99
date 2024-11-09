@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,26 @@ public class GameScene : MonoBehaviour
     private float dayDuration = 10f; // 낮 지속 시간
     private float nightDuration = 3f; // 밤 지속 시간
     private bool isNight = false; // 현재 밤인지 여부
+
+
+    private int currentStageIndex = 0;
+    private int currentScore = 0;
+    
+    public TextMeshProUGUI currentScoreText;
+
+
+    public void UpdateUI(int infectedChickenCount)
+    {
+
+    }
+
+    public void GameEnd()
+    {
+        //player가 죽었을때, lose
+        
+        //Player가 묙표 달성했을때, win
+        
+    }
     
     private void Start()
     {
@@ -21,6 +42,11 @@ public class GameScene : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        
+    }
+    
     // 낮-밤 주기 코루틴
     private IEnumerator DayNightCycle()
     {
