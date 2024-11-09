@@ -156,7 +156,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      free-icon-gloves-1031506_0: -1305452721984594914
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
