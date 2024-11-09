@@ -18,7 +18,7 @@ public class MainBGM : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
             if (!audioSource.isPlaying)
             {
                 audioSource.clip = SoundManager.instance.startBGM;
