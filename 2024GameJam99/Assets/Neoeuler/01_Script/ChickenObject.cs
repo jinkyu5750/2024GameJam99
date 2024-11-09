@@ -370,7 +370,7 @@ public class ChickenObject : MonoBehaviour
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
 
-            collision.gameObject.GetComponent<PlayerObject>().TakeDamage(chickenDamage);
+            collision.gameObject.GetComponent<PlayerObject>()?.TakeDamage(chickenDamage);
             
             isKnockedBack = true;
             knockbackTimer = knockbackDuration;
