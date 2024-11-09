@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
@@ -71,14 +70,6 @@ public class ChickenObject : MonoBehaviour
     private bool isStopped = false; // 이동 중지 여부
 
     private Animator anim;
-
-    private bool isWalk;
-    private bool isSit;
-
-    public bool IsSit()
-    {
-        return isSit;
-    }
     
     void Start()
     {
@@ -109,8 +100,6 @@ public class ChickenObject : MonoBehaviour
         
         previousPosition = transform.position; // 시작 위치 설정
         directionUpdateTimer = directionUpdateInterval; // 타이머 초기화
-
-        anim.SetBool("isWalk", true);
     }
 
     public void Init()
@@ -125,6 +114,7 @@ public class ChickenObject : MonoBehaviour
 
     void Update()
     {
+        if (isStopped) return;
         if (isKnockedBack)
         {
             knockbackTimer -= Time.deltaTime;
@@ -151,9 +141,6 @@ public class ChickenObject : MonoBehaviour
         }
 
         previousPosition = transform.position; // 현재 위치를 이전 위치로 업데이트
-
-
-
     }
     
     
@@ -161,7 +148,6 @@ public class ChickenObject : MonoBehaviour
     // ChickenObject의 모든 움직임을 중지하는 메서드
     public void StopMovement()
     {
-
         isStopped = true;
 
         // 모든 이동 관련 코루틴 중지
@@ -275,11 +261,8 @@ public class ChickenObject : MonoBehaviour
         while (IsInfected)
         {
             yield return new WaitForSeconds(Random.Range(2f, 3f));
-            if (!isSit)
-            {
-                CoughAndInfect();
-            }
-
+            
+            CoughAndInfect();
 
         }
     }
@@ -302,7 +285,7 @@ public class ChickenObject : MonoBehaviour
     
     IEnumerator RandomMovement()
     {
-        while (true)
+        while (!isStopped)
         {
             if (CanMoveRandomly())
             {
@@ -311,7 +294,6 @@ public class ChickenObject : MonoBehaviour
             yield return new WaitForSeconds(randomMoveInterval);
         }
     }
-
     
     private void SetRandomTargetPosition()
     {
@@ -322,7 +304,7 @@ public class ChickenObject : MonoBehaviour
     private bool CanMoveRandomly()
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        return !isStopped && distanceToPlayer >= safeDistance && !isKnockedBack && !isSit;
+        return !isStopped && distanceToPlayer >= safeDistance && !isKnockedBack;
     }
 
     private Vector2 GetRandomDirection()
@@ -335,9 +317,7 @@ public class ChickenObject : MonoBehaviour
 
     void EvadePlayer()
     {
-        // isSit 상태일 때는 회피하지 않음
-        if (isStopped || isSit) return;
-
+        if (isStopped) return;
         float distance = Vector2.Distance(transform.position, player.position);
 
         if (distance < safeDistance)
@@ -453,32 +433,4 @@ public class ChickenObject : MonoBehaviour
             hpFill.transform.parent.gameObject.SetActive(true);
         }
     }
-    
-    public void SetSit(bool sit)
-    {
-        if (sit)
-        {
-            isWalk = false;
-            isSit = true;
-
-            // 이동 중지
-            if (randomMoveCoroutine != null) StopCoroutine(randomMoveCoroutine);
-
-            rb.velocity = Vector2.zero;
-            rb.isKinematic = true; // 물리 효과 제거하여 완전 정지
-        }
-        else
-        {
-            isWalk = true;
-            isSit = false;
-
-            rb.isKinematic = false; // 물리 효과 재적용
-            if (randomMoveCoroutine == null)
-                randomMoveCoroutine = StartCoroutine(RandomMovement());
-        }
-
-        anim.SetBool("isWalk", isWalk);
-        anim.SetBool("isSit", isSit);
-    }
-
 }
