@@ -1108,13 +1108,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingChicken: {fileID: 8300000, guid: 4287cfad872a99a4da7e8abcf3aa0cee, type: 3}
-  startBGM: {fileID: 8300000, guid: b1186ad84ba927a439204611344b6d38, type: 3}
-  stageBGM:
+  startBGM: {fileID: 8300000, guid: bf290b012c7bc3d48ba182cc4952fbef, type: 3}
+  stageSellectionBGM: {fileID: 0}
+  inStageBGM:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   buttonClick: {fileID: 8300000, guid: ae2e4f04e63f1f547a54c0771ece8997, type: 3}
   esc: {fileID: 8300000, guid: 09831152cfa3f134888895b6c11af1ee, type: 3}
+  clear: {fileID: 0}
 --- !u!4 &1913404972
 Transform:
   m_ObjectHideFlags: 0

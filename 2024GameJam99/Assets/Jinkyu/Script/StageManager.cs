@@ -1,3 +1,4 @@
+using EasyTransition;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +14,9 @@ public class StageManager : MonoBehaviour
     public Canvas uiCanvas, inGameCanvas;
     public GameObject currentStage;
 
+
+    public bool allClear = false;
+    public TransitionSettings transition;
     void Awake()
     {
 
@@ -23,6 +27,13 @@ public class StageManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if(allClear == true)
+        {
+            TransitionManager.Instance().Transition("Ending", transition, 0.2f);
+        }
+    }
     public IEnumerator OffUiCanvas(float duration)
     {
         yield return new WaitForSeconds(duration);
