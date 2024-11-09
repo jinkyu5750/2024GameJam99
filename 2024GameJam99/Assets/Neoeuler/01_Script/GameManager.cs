@@ -8,15 +8,28 @@ public class GameManager : MonoBehaviour
 
     public GameObject pickHandle;
     
+
+    public bool isGameStart = false;
+    public float clearTime = 0; // 게임진행시간
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if(StageManager.instance != null && StageManager.instance.currentStage != null && isGameStart == true)
+        {
+            clearTime += Time.deltaTime; // 클리어타임 누적
         }
     }
 
