@@ -1,12 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerObject : MonoBehaviour
 {
+    public Image hpFill;
+    
     public float moveSpeed = 5f; // 플레이어 이동 속도
     private Rigidbody2D rb;
     private Vector2 movement;
 
-    private float hp;
+    public float hp;
+    public float maxHp;
 
     
     public float attackCooldown = 1f; // 공격 쿨다운 (초)
@@ -19,6 +23,10 @@ public class PlayerObject : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         hp = 100;
+        maxHp = 100;
+
+        HpUIUpdate();
+        hpFill.transform.parent.gameObject.SetActive(false);
     }
 
     
@@ -52,10 +60,29 @@ public class PlayerObject : MonoBehaviour
         }
     }
 
+    
+    
     public void TakeDamage(float amount)
     {
         hp -= amount;
+
+        if (hp <= 0)
+        {
+            Die();
+        }
+        
+        HpUIUpdate();
     }
-    
+
+    private void Die()
+    {
+        Debug.Log("Die and Over");
+    }
+
+    private void HpUIUpdate()
+    {
+        hpFill.fillAmount = hp / maxHp;
+        hpFill.transform.parent.gameObject.SetActive(true);
+    }
     
 }
