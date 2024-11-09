@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance; // 싱글톤 패턴으로 접근 가능하게 설정
     private List<ChickenObject> chickens = new List<ChickenObject>(); // 모든 치킨을 관리하는 리스트
 
+    public GameObject pickHandle;
+    
     void Awake()
     {
         if (Instance == null)
@@ -104,5 +106,13 @@ public class GameManager : MonoBehaviour
         }
         return aliveCount;
     }
+
+    public Transform GetRandomChickenPick()
+    {
+        int rand = Random.Range(0, chickens.Count);
+
+        return chickens[rand].transform;
+    }
+    
     
 }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 41bc82716f5e6004198cf44cf63c3b26
+guid: 16055c6cf373a497f8be263a42ccbfb5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6148898045659155778
-    second: 3b27cae3482a1464_0
+      213: -1046444227985733684
+    second: map2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,43 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 3b27cae3482a1464_0
+      name: map2_0
       rect:
         serializedVersion: 2
-        x: 273
-        y: 236
-        width: 495
-        height: 276
+        x: 0
+        y: 0
+        width: 2250
+        height: 1250
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eb274644ec9baaaa0800000000000000
-      internalID: -6148898045659155778
+      spriteID: cc707a9d4884a71f0800000000000000
+      internalID: -1046444227985733684
       vertices: []
       indices: 
       edges: []
@@ -156,8 +130,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      3b27cae3482a1464_0: -6148898045659155778
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

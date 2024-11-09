@@ -1,8 +1,16 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+
+public enum ObjectState
+{
+    Walk,
+    Cough,
+    Sit,
+}
 
 public class ChickenObject : MonoBehaviour
 {
@@ -16,6 +24,7 @@ public class ChickenObject : MonoBehaviour
     public float randomMoveDistance = 1f; // 기본 이동 거리
     public float smoothMoveSpeed = 2f;
     public Color infectedColor = Color.magenta;
+    public float chickenDamage = 10f;
     
     // 체력과 감염 수치
     public float maxHealth = 100f;
@@ -50,8 +59,22 @@ public class ChickenObject : MonoBehaviour
     private float infectedMoveDistanceMultiplier = 2f; // 감염 시 이동 거리 배율
     private float infectedMoveIntervalDivider = 2f; // 감염 시 이동 주기 나누기 배율
     
+    private float directionUpdateTimer; // 방향 업데이트를 위한 타이머
+    private Vector2 lastDirection;
+    private Vector2 previousPosition; // 이전 프레임 위치 저장
+    // 이동 방향에 따라 Sprite를 Flip
+    public float directionUpdateInterval = 0.1f; // 방향 업데이트 주기 (초)
+
+    private SpriteAnimation spriteAnimation;
+    
+    private bool isStopped = false; // 이동 중지 여부
+
+    private Animator anim;
+    
     void Start()
     {
+        anim = GetComponent<Animator>();
+        spriteAnimation = GetComponent<SpriteAnimation>();
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
@@ -74,6 +97,14 @@ public class ChickenObject : MonoBehaviour
         if (infectionFill != null) infectionFill.transform.parent.gameObject.SetActive(false);
         
         GameManager.Instance.RegisterChicken(this); // 게임 매니저에 등록
+        
+        previousPosition = transform.position; // 시작 위치 설정
+        directionUpdateTimer = directionUpdateInterval; // 타이머 초기화
+    }
+
+    public void Init()
+    {
+        
     }
 
     void OnDestroy()
@@ -83,6 +114,7 @@ public class ChickenObject : MonoBehaviour
 
     void Update()
     {
+        if (isStopped) return;
         if (isKnockedBack)
         {
             knockbackTimer -= Time.deltaTime;
@@ -99,8 +131,55 @@ public class ChickenObject : MonoBehaviour
         {
             EvadePlayer();
         }
+
+        // 타이머가 interval에 도달할 때만 방향 업데이트 수행
+        directionUpdateTimer -= Time.deltaTime;
+        if (directionUpdateTimer <= 0f)
+        {
+            UpdateSpriteDirection();
+            directionUpdateTimer = directionUpdateInterval; // 타이머 리셋
+        }
+
+        previousPosition = transform.position; // 현재 위치를 이전 위치로 업데이트
+    }
+    
+    
+
+    // ChickenObject의 모든 움직임을 중지하는 메서드
+    public void StopMovement()
+    {
+        isStopped = true;
+
+        // 모든 이동 관련 코루틴 중지
+        if (randomMoveCoroutine != null) StopCoroutine(randomMoveCoroutine);
+
+        // Rigidbody의 속도를 0으로 설정하고, 물리 작용을 무시하도록 설정
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
+
+        // Collider 비활성화하여 충돌 차단
+        GetComponent<Collider2D>().enabled = false;
     }
 
+ 
+    // 이동 방향에 따라 Sprite를 Flip
+    // 이동 방향에 따라 Sprite를 Flip
+    private void UpdateSpriteDirection()
+    {
+        Vector2 currentPosition = transform.position;
+        Vector2 direction = currentPosition - previousPosition; // 이전 위치와 현재 위치 차이 계산
+
+        if (direction.x < 0) // 왼쪽으로 이동할 때
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (direction.x > 0) // 오른쪽으로 이동할 때
+        {
+            spriteRenderer.flipX = true;
+        }
+    }
+    
+    
     // 감염 상태로 변경
     public void Infect()
     {
@@ -182,7 +261,9 @@ public class ChickenObject : MonoBehaviour
         while (IsInfected)
         {
             yield return new WaitForSeconds(Random.Range(2f, 3f));
+            
             CoughAndInfect();
+
         }
     }
 
@@ -204,7 +285,7 @@ public class ChickenObject : MonoBehaviour
     
     IEnumerator RandomMovement()
     {
-        while (true)
+        while (!isStopped)
         {
             if (CanMoveRandomly())
             {
@@ -223,7 +304,7 @@ public class ChickenObject : MonoBehaviour
     private bool CanMoveRandomly()
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        return distanceToPlayer >= safeDistance && !isKnockedBack;
+        return !isStopped && distanceToPlayer >= safeDistance && !isKnockedBack;
     }
 
     private Vector2 GetRandomDirection()
@@ -236,6 +317,7 @@ public class ChickenObject : MonoBehaviour
 
     void EvadePlayer()
     {
+        if (isStopped) return;
         float distance = Vector2.Distance(transform.position, player.position);
 
         if (distance < safeDistance)
@@ -256,6 +338,8 @@ public class ChickenObject : MonoBehaviour
             Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
             rb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
 
+            collision.gameObject.GetComponent<PlayerObject>().TakeDamage(chickenDamage);
+            
             isKnockedBack = true;
             knockbackTimer = knockbackDuration;
         }
@@ -324,7 +408,7 @@ public class ChickenObject : MonoBehaviour
         UpdateInfectionUI();
     }
 
-    private void Die()
+    public void Die()
     {
         Debug.Log("ChickenObject가 사망했습니다.");
         gameObject.SetActive(false);
@@ -346,6 +430,7 @@ public class ChickenObject : MonoBehaviour
         {
             infectionFill.fillAmount = infectionLevel / maxInfectionLevel;
             infectionFill.transform.parent.gameObject.SetActive(true);
+            hpFill.transform.parent.gameObject.SetActive(true);
         }
     }
 }
