@@ -201,7 +201,7 @@ public class ChickenObject : MonoBehaviour
     // 감염 상태로 변경
     public void Infect()
     {
-        if (IsInfected) return;
+        if (IsInfected || !gameObject.activeSelf) return;
 
         IsInfected = true;
         if (spriteRenderer != null)
@@ -210,6 +210,8 @@ public class ChickenObject : MonoBehaviour
             originalColor = infectedColor;
         }
         
+        deathEvent?.Invoke();
+
         // 감염된 치킨은 이동 속도와 거리, 주기를 변경하고 주기적으로 기침을 시작
         UpdateInfectedMovementSettings();
         StartCoroutine(StartCoughing());
@@ -494,6 +496,37 @@ public class ChickenObject : MonoBehaviour
 
         anim.SetBool("isWalk", isWalk);
         anim.SetBool("isSit", isSit);
+    }
+    
+    public void CompletelyStop()
+    {
+        // 모든 이동 관련 코루틴 중지
+        if (randomMoveCoroutine != null)
+        {
+            StopCoroutine(randomMoveCoroutine);
+            randomMoveCoroutine = null;
+        }
+
+        // Rigidbody 속도와 물리 작용 정지
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.isKinematic = true; // 물리 효과 제거하여 완전 정지
+    
+        // 충돌 차단을 위해 Collider 비활성화
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+
+        // 애니메이션을 정지 상태로 설정
+        anim.SetBool("isWalk", true);
+        anim.SetBool("isSit", false);
+    
+        // 상태 플래그 업데이트
+        isStopped = true;
+        isSit = false;
+        isWalk = false;
     }
 
 }

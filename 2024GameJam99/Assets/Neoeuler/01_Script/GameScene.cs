@@ -1,37 +1,37 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameScene : MonoBehaviour
 {
-    public Image nightOverlayPanel; // 밤을 표현하는 오버레이 패널
-    private float dayDuration = 10f; // 낮 지속 시간
-    private float nightDuration = 3f; // 밤 지속 시간
+    public bool isCatchable;
+    
+    private Image nightOverlayPanel; // 밤을 표현하는 오버레이 패널
+    private float dayDuration = 5f; // 낮 지속 시간
+    private float nightDuration = 2f; // 밤 지속 시간
     private bool isNight = false; // 현재 밤인지 여부
 
+    private Camera camera;
 
     private int currentStageIndex = 0;
     private int currentScore = 0;
-    
-    public TextMeshProUGUI currentScoreText;
 
+    private GameManager gm;
+    private Player_State playerState;
 
-    public void UpdateUI(int infectedChickenCount)
-    {
-
-    }
-
-    public void GameEnd()
-    {
-        //player가 죽었을때, lose
-        
-        //Player가 묙표 달성했을때, win
-        
-    }
+    public Hand hand;
     
     private void Start()
     {
+        camera = Camera.main;
+        CameraFollow cf = camera.gameObject.GetComponent<CameraFollow>();
+
+        var player = GameObject.Find("Player");
+        playerState = player.GetComponent<Player_State>();
+        cf.SetFollow(player.transform);
 
         nightOverlayPanel = GameObject.Find("NightImage").GetComponent<Image>();
         // 오버레이 패널이 설정되어 있으면 낮-밤 주기를 시작
@@ -40,11 +40,22 @@ public class GameScene : MonoBehaviour
             nightOverlayPanel.gameObject.SetActive(true);
             StartCoroutine(DayNightCycle());
         }
+        
+        gm.UpdateUI();
     }
 
-    public void Init()
+    public void Init(GameManager gm)
     {
+        this.gm = gm;
+    }
+
+    public ChickenObject GetOneNotSit()
+    {
+        ChickenObject chic = gm.GetRandomAliveChickenAtNight();
         
+        chic.SetSit(false);
+        
+        return chic;
     }
     
     // 낮-밤 주기 코루틴
@@ -52,16 +63,36 @@ public class GameScene : MonoBehaviour
     {
         while (true)
         {
-            // 밤으로 전환 (오버레이 패널 페이드 인)
-            yield return StartCoroutine(FadeOverlay(0f, 0.7f, 1f));
-            isNight = true;
-            yield return new WaitForSeconds(nightDuration);
-
             // 낮으로 전환 (오버레이 패널 페이드 아웃)
-            yield return StartCoroutine(FadeOverlay(0.7f, 0f, 1f));
+            yield return StartCoroutine(FadeOverlay(0.7f, 0f, 0.5f));
             isNight = false;
-            yield return new WaitForSeconds(dayDuration);
+            gm.SetSit(false);
+            yield return new WaitForSeconds(dayDuration+Random.Range(-1.0f, 1.0f));
+            
+            // 밤으로 전환 (오버레이 패널 페이드 인)
+            yield return StartCoroutine(FadeOverlay(0f, 0.7f, 0.5f));
+            isNight = true;
+            gm.SetSit(true);
+            StartCoroutine(CatchOne());
+            yield return new WaitForSeconds(nightDuration+Random.Range(0.0f, 2.0f));
+
+
         }
+    }
+
+    private IEnumerator CatchOne()
+    {
+        gm.UpdateUI();
+        yield return new WaitForSeconds(0.5f);
+        ChickenObject co = GetOneNotSit();
+        if (isCatchable)
+        {
+            
+        }
+        yield return new WaitForSeconds(1f);
+        hand.Init(co.gameObject);
+        
+        yield return null;
     }
 
     // 오버레이 패널의 알파 값을 부드럽게 전환하는 코루틴
