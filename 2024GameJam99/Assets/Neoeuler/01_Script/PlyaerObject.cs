@@ -6,6 +6,8 @@ public class PlayerObject : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 movement;
 
+    private float hp;
+
     
     public float attackCooldown = 1f; // 공격 쿨다운 (초)
     public float damageAmount = 10f; // 공격 데미지
@@ -16,8 +18,10 @@ public class PlayerObject : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        hp = 100;
     }
 
+    
     void Update()
     {
         // 방향키 입력 받기
@@ -50,7 +54,7 @@ public class PlayerObject : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        
+        hp -= amount;
     }
     
     
