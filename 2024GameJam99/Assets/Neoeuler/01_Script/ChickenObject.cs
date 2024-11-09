@@ -5,6 +5,13 @@ using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+public enum ObjectState
+{
+    Walk,
+    Cough,
+    Sit,
+}
+
 public class ChickenObject : MonoBehaviour
 {
     public Transform player;
@@ -57,9 +64,17 @@ public class ChickenObject : MonoBehaviour
     private Vector2 previousPosition; // 이전 프레임 위치 저장
     // 이동 방향에 따라 Sprite를 Flip
     public float directionUpdateInterval = 0.1f; // 방향 업데이트 주기 (초)
+
+    private SpriteAnimation spriteAnimation;
+    
+    private bool isStopped = false; // 이동 중지 여부
+
+    private Animator anim;
     
     void Start()
     {
+        anim = GetComponent<Animator>();
+        spriteAnimation = GetComponent<SpriteAnimation>();
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
@@ -99,6 +114,7 @@ public class ChickenObject : MonoBehaviour
 
     void Update()
     {
+        if (isStopped) return;
         if (isKnockedBack)
         {
             knockbackTimer -= Time.deltaTime;
@@ -125,10 +141,25 @@ public class ChickenObject : MonoBehaviour
         }
 
         previousPosition = transform.position; // 현재 위치를 이전 위치로 업데이트
-        
-        
     }
+    
+    
 
+    // ChickenObject의 모든 움직임을 중지하는 메서드
+    public void StopMovement()
+    {
+        isStopped = true;
+
+        // 모든 이동 관련 코루틴 중지
+        if (randomMoveCoroutine != null) StopCoroutine(randomMoveCoroutine);
+
+        // Rigidbody의 속도를 0으로 설정하고, 물리 작용을 무시하도록 설정
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
+
+        // Collider 비활성화하여 충돌 차단
+        GetComponent<Collider2D>().enabled = false;
+    }
 
  
     // 이동 방향에 따라 Sprite를 Flip
@@ -230,7 +261,9 @@ public class ChickenObject : MonoBehaviour
         while (IsInfected)
         {
             yield return new WaitForSeconds(Random.Range(2f, 3f));
+            
             CoughAndInfect();
+
         }
     }
 
@@ -252,7 +285,7 @@ public class ChickenObject : MonoBehaviour
     
     IEnumerator RandomMovement()
     {
-        while (true)
+        while (!isStopped)
         {
             if (CanMoveRandomly())
             {
@@ -271,7 +304,7 @@ public class ChickenObject : MonoBehaviour
     private bool CanMoveRandomly()
     {
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        return distanceToPlayer >= safeDistance && !isKnockedBack;
+        return !isStopped && distanceToPlayer >= safeDistance && !isKnockedBack;
     }
 
     private Vector2 GetRandomDirection()
@@ -284,6 +317,7 @@ public class ChickenObject : MonoBehaviour
 
     void EvadePlayer()
     {
+        if (isStopped) return;
         float distance = Vector2.Distance(transform.position, player.position);
 
         if (distance < safeDistance)
@@ -374,7 +408,7 @@ public class ChickenObject : MonoBehaviour
         UpdateInfectionUI();
     }
 
-    private void Die()
+    public void Die()
     {
         Debug.Log("ChickenObject가 사망했습니다.");
         gameObject.SetActive(false);

@@ -29,6 +29,10 @@ public class PlayerObject : MonoBehaviour
         hpFill.transform.parent.gameObject.SetActive(false);
     }
 
+    public void StopMovement()
+    {
+        Debug.Log("ffdd ");
+    }
     
     void Update()
     {
