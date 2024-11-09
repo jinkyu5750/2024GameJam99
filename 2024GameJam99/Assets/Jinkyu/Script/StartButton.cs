@@ -18,7 +18,7 @@ public class StartButton : MonoBehaviour
         seq.Append(transform.DOScale(new Vector2(0.95f, 0.95f), 0.1f).SetEase(ease));
         seq.Play().OnComplete(() =>
         {
-            TransitionManager.Instance().Transition("StageMenu", transition, 0.5f);
+            TransitionManager.Instance().Transition("StageMenu", transition, 0.2f);
            // SceneManager.LoadScene("StageMenu");
         }); ; 
 

@@ -7,8 +7,8 @@ public class CharacterController : MonoBehaviour
     private Animator animator;
     private float horizontalInput;
     private float verticalInput;
-    private bool isSitting = false; // Track if the character is sitting
-    private bool isAttacking = false; // Track if the character is attacking
+    private bool isSitting = false; 
+    private bool isAttacking = false; 
 
     public bool IsSitting()
     {
@@ -17,13 +17,13 @@ public class CharacterController : MonoBehaviour
 
     void Start()
     {
-        // Get the Animator component attached to the character
+     
         animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // Allow movement only if not attacking
+       
         if (!isAttacking)
         {
             // Get player input for movement (left, right, up, down)
