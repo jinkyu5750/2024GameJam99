@@ -7,29 +7,38 @@ public class GameManager : MonoBehaviour
     private List<ChickenObject> chickens = new List<ChickenObject>(); // 모든 치킨을 관리하는 리스트
 
     public GameObject pickHandle;
-    
 
     public bool isGameStart = false;
-    public float clearTime = 0; // 게임진행시간
+    public float clearTime = 0; // 게임 진행 시간
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // 다른 씬 이동 시 삭제되지 않도록 설정
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // 싱글톤이므로 추가 인스턴스를 방지
         }
     }
 
     private void Update()
     {
-        if(StageManager.instance != null && StageManager.instance.currentStage != null && isGameStart == true)
+        if (StageManager.instance != null && StageManager.instance.currentStage != null && isGameStart)
         {
-            clearTime += Time.deltaTime; // 클리어타임 누적
+            clearTime += Time.deltaTime; // 클리어 타임 누적
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SetSit(true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SetSit(false);
         }
     }
 
@@ -123,8 +132,15 @@ public class GameManager : MonoBehaviour
     public Transform GetRandomChickenPick()
     {
         int rand = Random.Range(0, chickens.Count);
-
         return chickens[rand].transform;
+    }
+
+    public void SetSit(bool flag)
+    {
+        foreach (var chicken in chickens)
+        {
+            chicken.SetSit(flag);
+        }
     }
     
     
