@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,8 +7,7 @@ public class GameManager : MonoBehaviour
     private List<ChickenObject> chickens = new List<ChickenObject>(); // 모든 치킨을 관리하는 리스트
 
     public GameObject pickHandle;
-
-    private bool flag = false;
+    
     void Awake()
     {
         if (Instance == null)
@@ -21,20 +18,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            SetSit(true);
-        }
-        if (Input.GetKey(KeyCode.R))
-        {
-            SetSit(false);
-        }
-        
-        
     }
 
     // 치킨 등록
@@ -130,12 +113,6 @@ public class GameManager : MonoBehaviour
 
         return chickens[rand].transform;
     }
-
-    public void SetSit(bool flag)
-    {
-        foreach (var chicken in chickens)
-        {
-            chicken.SetSit(flag);
-        }
-    }
+    
+    
 }
