@@ -9,11 +9,12 @@ public class SoundManager : MonoBehaviour
     [Header("BGM")]
     [SerializeField] public AudioClip openingChicken;
     [SerializeField] public AudioClip startBGM;
-    [SerializeField] public AudioClip[] stageBGM = new AudioClip[3];
+    [SerializeField] public AudioClip stageSellectionBGM;
+    [SerializeField] public AudioClip[] inStageBGM = new AudioClip[3];
     [Header("UI")]
     [SerializeField] public AudioClip buttonClick;
     [SerializeField] public AudioClip esc;
-
+    [SerializeField] public AudioClip clear;
 
     void Awake()
     {
