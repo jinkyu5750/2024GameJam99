@@ -82,6 +82,8 @@ public class ChickenObject : MonoBehaviour
     
     void Start()
     {
+        player = transform.parent.transform.Find("Player");
+        
         anim = GetComponent<Animator>();
         spriteAnimation = GetComponent<SpriteAnimation>();
         rb = GetComponent<Rigidbody2D>();
@@ -277,12 +279,22 @@ public class ChickenObject : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(2f, 3f));
             if (!isSit)
             {
+                TriggerCoughAnimation();
                 CoughAndInfect();
             }
 
 
         }
     }
+    // Cough 애니메이션 트리거를 설정하는 메서드
+    private void TriggerCoughAnimation()
+    {
+        if (anim != null)
+        {
+            anim.SetTrigger("Cough");
+        }
+    }
+
 
     // 일정 거리 내의 비감염 치킨을 감염시키는 기침 메서드
     private void CoughAndInfect()

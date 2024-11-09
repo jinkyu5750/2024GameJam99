@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
@@ -5,6 +6,7 @@ public class CameraFollow : MonoBehaviour
     public Transform target; // 따라갈 대상 (예: PlayerObject)
     public float smoothSpeed = 0.125f; // 카메라 이동 속도
     public Vector3 offset; // 카메라와 대상 간 거리 오프셋
+    
 
     void LateUpdate()
     {
@@ -19,5 +21,10 @@ public class CameraFollow : MonoBehaviour
 
         // 카메라 위치 설정
         transform.position = smoothedPosition;
+    }
+
+    public void SetFollow(Transform trans)
+    {
+        target = trans;
     }
 }
