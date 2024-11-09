@@ -22,6 +22,8 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: -3975956873529151764, guid: e5e517d2b0189cc4db97081749ad49c6, type: 3}
+    - time: 0.9166667
+      value: {fileID: -3975956873529151764, guid: e5e517d2b0189cc4db97081749ad49c6, type: 3}
     - time: 1
       value: {fileID: -3975956873529151764, guid: e5e517d2b0189cc4db97081749ad49c6, type: 3}
     attribute: m_Sprite
@@ -46,6 +48,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
+    - {fileID: -3975956873529151764, guid: e5e517d2b0189cc4db97081749ad49c6, type: 3}
     - {fileID: -3975956873529151764, guid: e5e517d2b0189cc4db97081749ad49c6, type: 3}
     - {fileID: -3975956873529151764, guid: e5e517d2b0189cc4db97081749ad49c6, type: 3}
   m_AnimationClipSettings:
@@ -74,8 +77,8 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.9166667
-    functionName: OffAttrs
-    data: Sit
+    functionName: OffIsSit
+    data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

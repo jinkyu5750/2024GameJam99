@@ -7,8 +7,14 @@ using EasyTransition;
 public class StageSelectionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 
+    public AudioSource audioSource;
     public TransitionSettings t;
 
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     void Update()
     {
 
@@ -17,6 +23,9 @@ public class StageSelectionButton : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void ClickStageButton()
     {
+
+        audioSource.clip = SoundManager.instance.buttonClick;
+        audioSource.Play();
 
         TransitionManager.Instance().runningTransition = false;
         TransitionManager.Instance().Transition(t, 0.2f);
