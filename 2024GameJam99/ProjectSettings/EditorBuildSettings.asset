@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MainScene/Main.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Jinkyu/Scene/Start.unity
+    guid: 85a1f08887aa8bd41aabc75585fef3fe
+  - enabled: 1
+    path: Assets/Jinkyu/Scene/StageMenu.unity
+    guid: e702ce7dd679e4c4986558db40a89408
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
