@@ -1,0 +1,25 @@
+{ "skeleton": { "images": "C:/Users/psb71/OneDrive/바탕 화면/경북잼/공격/" },
+"PhotoshopToSpine": { "scale": 1, "padding": 1, "trim": true },
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "가스", "bone": "root", "attachment": "가스" },
+	{ "name": "캐릭터", "bone": "root", "attachment": "캐릭터" },
+	{ "name": "기침", "bone": "root", "attachment": "기침" }
+],
+"skins": {
+	"default": {
+		"가스": {
+			"가스": { "x": 838, "y": -555.5, "width": 334, "height": 415 }
+		},
+		"캐릭터": {
+			"캐릭터": { "x": 589, "y": -483, "width": 460, "height": 488 }
+		},
+		"기침": {
+			"기침": { "x": 166, "y": -503, "width": 380, "height": 374 }
+		}
+	}
+},
+"animations": { "animation": {} }
+}
