@@ -11,18 +11,16 @@ public class Player_Movement : Player_State
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
-        if (h > 0) sr.flipX = true;
-        else if (h < 0) sr.flipX = false;
+        if (h < 0)
+            sr.flipX = false;
+        else if (h > 0)
+            sr.flipX = true;
 
         if (h != 0 || v != 0)
             ani.SetBool("Move", true);
         else if (h == 0 && v == 0)
             ani.SetBool("Move", false);
 
-        if (isSit == false)
-        {
-            transform.position += new Vector3(h, v, 0) * moveSpeed;
-        }
         if (Input.GetKeyDown(KeyCode.Space) && isSit == false && isDash == false)
         {
             isSit = true;
@@ -33,13 +31,18 @@ public class Player_Movement : Player_State
         {
             isDash = true;
             ani.SetTrigger("Dash");
-            rig.AddForce( rig.velocity.normalized * 10, ForceMode2D.Impulse);
+            Vector2 dashDirection = new Vector2(h, v).normalized;
+            rig.AddForce(dashDirection * 10, ForceMode2D.Impulse);
         }
     }
 
     private void FixedUpdate()
     {
-      
+
+        if (isSit == false && isDash == false)
+        {
+            rig.position += new Vector2(h, v) * moveSpeed;    
+        }
     }
 
     public void OffAttrs(string Attr)
@@ -51,6 +54,7 @@ public class Player_Movement : Player_State
                 break;
             case "Dash":
                 isDash = false;
+                rig.velocity = Vector2.zero;
                 break;
         }
     }
