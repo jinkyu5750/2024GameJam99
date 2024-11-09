@@ -6,15 +6,9 @@ using DG.Tweening;
 using EasyTransition;
 public class StageSelectionButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private StageManager SM;
+
     public TransitionSettings t;
 
-    void Start()
-    {
-        SM = GameObject.Find("StageManager").GetComponent<StageManager>();
-    }
-
-    // Update is called once per frame
     void Update()
     {
 
@@ -25,11 +19,13 @@ public class StageSelectionButton : MonoBehaviour, IPointerEnterHandler, IPointe
     {
 
         TransitionManager.Instance().runningTransition = false;
-        TransitionManager.Instance().Transition(t, 0.5f);
+        TransitionManager.Instance().Transition(t, 0.2f);
 
         int stageNum = int.Parse(transform.name[11].ToString());
-        StartCoroutine(SM.OffUiCanvas(1.5f));
-        SM.InstantiateMap(stageNum-1);
+        StartCoroutine(StageManager.instance.OffUiCanvas(1.2f));
+        StageManager.instance.InstantiateMap(stageNum - 1);
+        GameManager.Instance.clearTime = 0f;
+        GameManager.Instance.isGameStart = true;
         
     }
 
