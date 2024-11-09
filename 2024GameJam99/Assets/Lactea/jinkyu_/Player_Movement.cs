@@ -5,9 +5,15 @@ public class Player_Movement : Player_State
     private float h, v;
     [SerializeField] private bool isSit;
     [SerializeField] private bool isDash;
+    private float dashSpeed = 0.8f;
+    private float dashCur=0, dashCool = 5f;
     private void Update()
     {
 
+        if (dashCur >= 0)
+        {
+            dashCur -= Time.deltaTime;
+        }
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
@@ -25,37 +31,41 @@ public class Player_Movement : Player_State
         {
             isSit = true;
             ani.SetTrigger("Sit");
+            Invoke("OffIsSit", 0.7f);
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && isSit == false && isDash == false)
+        if (Input.GetKeyDown(KeyCode.C) && dashCur <= 0 && isSit == false && isDash == false)
         {
+            dashCur = dashCool;
             isDash = true;
             ani.SetTrigger("Dash");
-            Vector2 dashDirection = new Vector2(h, v).normalized;
-            rig.AddForce(dashDirection * 10, ForceMode2D.Impulse);
+            moveSpeed = dashSpeed;
+            Invoke("SetMoveSpeed", 1.5f);
         }
     }
 
+
+    public void SetMoveSpeed()
+    {
+        moveSpeed = 0.3f;
+    }
     private void FixedUpdate()
     {
 
         if (isSit == false && isDash == false)
         {
-            rig.position += new Vector2(h, v) * moveSpeed;    
+            rig.position += new Vector2(h, v) * moveSpeed;
         }
     }
 
-    public void OffAttrs(string Attr)
+
+    public void OffIsSit()
     {
-        switch (Attr)
-        {
-            case "Sit":
-                isSit = false;
-                break;
-            case "Dash":
-                isDash = false;
-                rig.velocity = Vector2.zero;
-                break;
-        }
+        isSit = false;
     }
+    public void OffIsDash()
+    {
+        isDash = false;
+    }
+    
 }
