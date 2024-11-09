@@ -1,15 +1,28 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // 싱글톤 패턴으로 접근 가능하게 설정
-    private List<ChickenObject> chickens = new List<ChickenObject>(); // 모든 치킨을 관리하는 리스트
+    [SerializeField]private List<ChickenObject> chickens = new List<ChickenObject>(); // 모든 치킨을 관리하는 리스트
 
     public GameObject pickHandle;
 
     public bool isGameStart = false;
     public float clearTime = 0; // 게임 진행 시간
+
+    public TextMeshProUGUI scoreDisplay;
+    public TextMeshProUGUI elapsedTime;
+    
+    [SerializeField] private GameScene gameSceneHandle;
+    [SerializeField] private Player_State playerState;
+    [SerializeField] private Clear clear;
+
+    private int stageNumber = 0;
 
     void Awake()
     {
@@ -24,30 +37,64 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetStage(int index)
+    {
+        chickens.Clear();
+        clearTime = 0;
+        stageNumber = index;
+        
+        scoreDisplay.gameObject.SetActive(true);
+        int currentScore = GetInfectedChickenCount();
+        int currentMax = GetAliveChickenCount();
+        scoreDisplay.text = $"{currentScore} / {currentMax}";
+    }
+    
     private void Update()
     {
         if (StageManager.instance != null && StageManager.instance.currentStage != null && isGameStart)
         {
             clearTime += Time.deltaTime; // 클리어 타임 누적
+            if (gameSceneHandle == null)
+            {
+                gameSceneHandle = GameObject.Find("GameScene").GetComponent<GameScene>();
+                gameSceneHandle.Init(this);
+                playerState = GameObject.Find("Player").GetComponent<Player_State>();
+                
+            }
+
+            UpdateElapsedTimeDisplay();
         }
+
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            SetSit(true);
+            //SetSit(true);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SetSit(false);
+            //SetSit(false);
         }
+
+
     }
 
+    private void UpdateElapsedTimeDisplay()
+    {
+        int minutes = Mathf.FloorToInt(clearTime / 60); // 분 계산
+        int seconds = Mathf.FloorToInt(clearTime % 60); // 초 계산
+
+        // "분:초" 형식으로 텍스트 업데이트
+        elapsedTime.text = $"{minutes:00}:{seconds:00}";
+    }
+    
     // 치킨 등록
     public void RegisterChicken(ChickenObject chicken)
     {
         if (!chickens.Contains(chicken))
         {
             chickens.Add(chicken);
+            chicken.Init(UpdateUI);
         }
     }
 
@@ -139,9 +186,77 @@ public class GameManager : MonoBehaviour
     {
         foreach (var chicken in chickens)
         {
-            chicken.SetSit(flag);
+            if (chicken.gameObject.activeSelf)
+            {
+                chicken.SetSit(flag);
+            }
         }
     }
     
+    public ChickenObject GetRandomAliveChickenAtNight()
+    {
+        List<ChickenObject> aliveChickens = new List<ChickenObject>();
+
+        // 살아있는 chicken을 리스트에 추가
+        foreach (var chicken in chickens)
+        {
+            if (chicken.gameObject.activeSelf)
+            {
+                aliveChickens.Add(chicken);
+            }
+        }
+
+        // 살아있는 chicken이 없으면 null 반환
+        if (aliveChickens.Count == 0)
+        {
+            return null;
+        }
+
+        // 무작위로 살아있는 chicken 선택
+        int randomIndex = Random.Range(0, aliveChickens.Count);
+        return aliveChickens[randomIndex];
+    }
+
+
+    public void UnsetSitRandomly()
+    {
+        var rand = Random.Range(0, chickens.Count);
+        
+        chickens[rand].SetSit(false);
+    }
+    
+    public void UpdateUI()
+    {
+        
+        scoreDisplay.gameObject.SetActive(true);
+        int currentScore = GetInfectedChickenCount();
+        int currentMax = GetAliveChickenCount();
+        scoreDisplay.text = $"{currentScore} / {currentMax}";
+
+        if (currentScore >= currentMax)
+        {
+            GameWin();
+        }
+    }
+
+    public void GameWin()
+    {
+        if (clear.gameObject.activeSelf)
+        {
+            return;
+        }
+        //win
+        Debug.Log("Game Result call");
+        clear.InitClearTime(clearTime);
+        clear.InitRemainedChickeNum(GetAliveChickenCount());
+        foreach (var chicken in chickens)
+        {
+            chicken.CompletelyStop();
+        }
+        
+        clear.gameObject.SetActive(true);
+
+        //StageManager.instance.stageClear[stageNumber] = true;
+    }
     
 }

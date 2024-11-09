@@ -13,11 +13,11 @@ public class Gas1Script : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Chicken"))
+        if(collision.gameObject.CompareTag("Chicken"))
         {
-            if (transform.name == "°¡½º_1")
+            if (transform.name == "ê°€ìŠ¤_1(Clone)")
                 collision.gameObject.GetComponent<ChickenObject>().TakeDamage(10, 25);
-            else if (transform.name == "°¡½º_2")
+            else if (transform.name == "ê°€ìŠ¤_2(Clone)")
                 collision.gameObject.GetComponent<ChickenObject>().TakeDamage(0, 30);
         }
     }

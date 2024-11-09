@@ -7,10 +7,10 @@ public class StageManager : MonoBehaviour
     public static StageManager instance;
 
 
-    [Header("½ºÅ×ÀÌÁö ÇÁ¸®ÆÕ")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private GameObject[] stage = new GameObject[3];
-    [SerializeField] private bool[] stageClear = { false, false, false }; // Å¬¸®¾î½Ã true·Î, ¼Â´Ù true¸é ¿£µù // Å¬¸®¾îÇß´Ù´Â°É Ç¥½ÃÇÒ°ÔÇÊ¿äÇÔ
-    [SerializeField] private int currentStageIdx = -1; // -1ÀÎ °æ¿ì´Â ½ºÅ×ÀÌÁö¼±ÅÃ¾À,½ÃÀÛ¾À , »ç½Ç ¾ê ÀÖ¾î¾ßµÇ´ÂÁø ¸ð¸£°ÚÀ½¾ÆÁ÷
+    [SerializeField] public bool[] stageClear = { false, false, false }; // Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½, ï¿½Â´ï¿½ trueï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ // Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ß´Ù´Â°ï¿½ Ç¥ï¿½ï¿½ï¿½Ò°ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½
+    [SerializeField] private int currentStageIdx = -1; // -1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¾ï¿½,ï¿½ï¿½ï¿½Û¾ï¿½ , ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö¾ï¿½ßµÇ´ï¿½ï¿½ï¿½ ï¿½ð¸£°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public Canvas uiCanvas, inGameCanvas;
     public GameObject currentStage;
 
@@ -45,7 +45,7 @@ public class StageManager : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
 
-        if (inGameCanvas.transform.GetChild(2).gameObject.activeSelf == true) // ¤¸~~~¤¤ ·¹Àüµå ÄÚµå UIManagerÁ»ÇØ³õÁö ¤»
+        if (inGameCanvas.transform.GetChild(2).gameObject.activeSelf == true) // ï¿½ï¿½~~~ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ UIManagerï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ ï¿½ï¿½
         {
 
             inGameCanvas.transform.GetChild(2).transform.GetChild(0).transform.GetChild(3).transform.localScale = Vector3.zero;

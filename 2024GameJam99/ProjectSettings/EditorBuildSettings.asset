@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Neoeuler/02_Scenes/Temp_Start.unity
-    guid: 63e0d79b9354745b8babcd9d247db2e9
-  - enabled: 1
     path: Assets/Neoeuler/02_Scenes/StageMenu.unity
     guid: c7aff2ade4e1f48f9a96faefd8acd3ed
+  - enabled: 1
+    path: Assets/Neoeuler/02_Scenes/dh_Start.unity
+    guid: 5444c451725604abdbf69fe5b33c01f0
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
