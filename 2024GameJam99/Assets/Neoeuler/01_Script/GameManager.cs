@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -59,9 +60,12 @@ public class GameManager : MonoBehaviour
                 gameSceneHandle = GameObject.Find("GameScene").GetComponent<GameScene>();
                 gameSceneHandle.Init(this);
                 playerState = GameObject.Find("Player").GetComponent<Player_State>();
-                
             }
 
+            if (playerState.HP <= 0)
+            {
+                GameLose();
+            }
             UpdateElapsedTimeDisplay();
         }
 
@@ -239,14 +243,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GameWin()
+    public void GameLose()
     {
         if (clear.gameObject.activeSelf)
         {
             return;
         }
         //win
-        Debug.Log("Game Result call");
+        Debug.Log("Game Result Lose");
         clear.InitClearTime(clearTime);
         clear.InitRemainedChickeNum(GetAliveChickenCount());
         foreach (var chicken in chickens)
@@ -256,7 +260,26 @@ public class GameManager : MonoBehaviour
         
         clear.gameObject.SetActive(true);
 
-        //StageManager.instance.stageClear[stageNumber] = true;
+    }
+
+    public void GameWin()
+    {
+        if (clear.gameObject.activeSelf)
+        {
+            return;
+        }
+        //win
+        Debug.Log("Game Result Win");
+        clear.InitClearTime(clearTime);
+        clear.InitRemainedChickeNum(GetAliveChickenCount());
+        foreach (var chicken in chickens)
+        {
+            chicken.CompletelyStop();
+        }
+        
+        clear.gameObject.SetActive(true);
+
+        StageManager.instance.stageClear[stageNumber] = true;
     }
     
 }

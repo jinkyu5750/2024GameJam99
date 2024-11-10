@@ -20,17 +20,18 @@ public class GameScene : MonoBehaviour
     private int currentScore = 0;
 
     private GameManager gm;
-    private Player_State playerState;
+    private Player_Movement playerMove;
 
     public Hand hand;
+    private GameObject player;
     
     private void Start()
     {
         camera = Camera.main;
         CameraFollow cf = camera.gameObject.GetComponent<CameraFollow>();
 
-        var player = GameObject.Find("Player");
-        playerState = player.GetComponent<Player_State>();
+        player = GameObject.Find("Player");
+        playerMove = player.GetComponent<Player_Movement>();
         cf.SetFollow(player.transform);
 
         nightOverlayPanel = GameObject.Find("NightImage").GetComponent<Image>();
@@ -87,7 +88,13 @@ public class GameScene : MonoBehaviour
         ChickenObject co = GetOneNotSit();
         if (isCatchable)
         {
-            
+            if (playerMove.isSit == false)
+            {
+                Debug.Log(playerMove.gameObject.name);
+                
+                Player_State ps = player.GetComponent<Player_State>();
+                ps.HP = 0;
+            }
         }
         yield return new WaitForSeconds(1f);
         hand.Init(co.gameObject);

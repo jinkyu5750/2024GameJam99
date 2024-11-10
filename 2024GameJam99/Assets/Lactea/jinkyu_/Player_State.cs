@@ -24,7 +24,7 @@ public class Player_State : MonoBehaviour
 
     private void Update()
     {
-        HP -= Time.deltaTime * 0.5f;
+        HP -= Time.deltaTime * 2f;
         HP_Slider.value = HP;
     }
 }

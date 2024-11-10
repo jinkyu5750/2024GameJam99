@@ -298,6 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 791bf909bfa634ded8c146d2ff5c81e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCatchable: 1
   hand: {fileID: 6627614726233897092}
 --- !u!1 &8332177059287911149
 GameObject:

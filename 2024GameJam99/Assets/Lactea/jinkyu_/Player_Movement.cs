@@ -3,7 +3,7 @@ using UnityEngine;
 public class Player_Movement : Player_State
 {
     private float h, v;
-    [SerializeField] private bool isSit;
+    [SerializeField] public bool isSit;
     [SerializeField] private bool isDash;
     private float dashSpeed = 0.8f;
     private float dashCur=0, dashCool = 5f;
@@ -27,12 +27,17 @@ public class Player_Movement : Player_State
         else if (h == 0 && v == 0)
             ani.SetBool("Move", false);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isSit == false && isDash == false)
+        if (Input.GetKey(KeyCode.Space) && isDash == false)
         {
             isSit = true;
-            ani.SetTrigger("Sit");
-            Invoke("OffIsSit", 0.7f);
+            ani.SetBool("IsSit", true);
         }
+        else
+        {
+            isSit = false;
+            ani.SetBool("IsSit", false);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.C) && dashCur <= 0 && isSit == false && isDash == false)
         {
