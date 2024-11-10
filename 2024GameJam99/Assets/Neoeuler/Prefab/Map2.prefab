@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 791bf909bfa634ded8c146d2ff5c81e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCatchable: 1
   hand: {fileID: 7343719078864540119}
 --- !u!1 &8769649013692556556
 GameObject:
@@ -373,6 +374,10 @@ PrefabInstance:
     - target: {fileID: 7286188622916739957, guid: c55c9b1ab9a0d447c8e40ecbb6743932, type: 3}
       propertyPath: m_Name
       value: hand
+      objectReference: {fileID: 0}
+    - target: {fileID: 7286188622916739957, guid: c55c9b1ab9a0d447c8e40ecbb6743932, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
