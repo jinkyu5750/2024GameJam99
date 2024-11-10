@@ -4,11 +4,11 @@ public class Player_Attack : MonoBehaviour
 {
     public Player_State PS;
 
-    public GameObject Gas1;
-    public GameObject Gas2;
+    public GameObject Gas1_1,Gas1_2;
+    public GameObject Gas2_1,Gas2_2;
 
     public GameObject Gas1Pos;
-    public GameObject Gas2pos;
+    public GameObject Gas2Pos;
 
     public float attack1Col = 3f, attack1Cur;
     public float attack2Col = 5f, attack2Cur;
@@ -45,14 +45,23 @@ public class Player_Attack : MonoBehaviour
     }
     public void InstantiatePrefab(string attack)
     {
+        GameObject go,go2;
         switch (attack)
         {
+
             case "Attack1":
-                GameObject go = Instantiate(Gas1, Gas1Pos.transform.position, Quaternion.identity);
+                if(PS.sr.flipX == false)
+                go = Instantiate(Gas1_2, Gas1Pos.transform.position, Quaternion.identity);
+                else
+                    go = Instantiate(Gas1_1, Gas1Pos.transform.position, Quaternion.identity);
+
                 go.transform.parent = Gas1Pos.transform;
                 break;
             case "Attack2":
-                Instantiate(Gas2, Gas2pos.transform.position, Quaternion.identity);
+                if (PS.sr.flipX == false)
+                    go2 = Instantiate(Gas2_2, Gas2Pos.transform.position, Quaternion.identity);
+                else
+                    go2 = Instantiate(Gas2_1, Gas2Pos.transform.position, Quaternion.identity);
                 break;
         }
     }
